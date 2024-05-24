@@ -1,21 +1,16 @@
 import styles from './ContactList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectContacts, selectStatusFilter } from '../../redux/selectors';
+import { getFilteredContacts, selectContacts} from '../../redux/selectors';
 import { deleteContacts} from '../../redux/operations';
 import Avatar from 'react-avatar';
 
 function ContactList() {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
-  const filter = useSelector(selectStatusFilter);
+  const filtredContacts = useSelector(getFilteredContacts);
 
-  const handleFilteredContacts = (contacts, filter) => {
-    return contacts.filter(contact =>
-      typeof contact.name === 'string' && contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
-  };
 
-  const filteredContacts = Array.isArray(contacts) ? handleFilteredContacts(contacts, filter) : [];
+  const filtered = Array.isArray(contacts) ? filtredContacts : [];
 
   if (!Array.isArray(contacts)) {
     console.error('Contacts is not an array:', contacts);
@@ -26,7 +21,7 @@ function ContactList() {
     <div className={styles.containerContacts}>
       <h3 className={styles.titleContact}>Contact List:</h3>
       <ul className={styles.itemsContact}>
-        {filteredContacts.map(contact => (
+        {filtered.map(contact => (
           <li key={contact.id} className={styles.itemContact}>
             <div className={styles.wrapperContact}>
             <Avatar name={contact.name} size="25" round={true} 
