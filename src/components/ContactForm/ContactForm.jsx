@@ -42,14 +42,18 @@ function ContactForm() {
   };
 
   const handleAddContacts = (newContact) => {
-    const existingContact = contacts.find(contact => contact.name === newContact.name);
-
-    if (existingContact) {
+    const existingContactByName = contacts.find(contact => contact.name === newContact.name);
+    const existingContactByNumber = contacts.find(contact => contact.number === newContact.number);
+  
+    if (existingContactByName) {
       Notiflix.Notify.failure(`${newContact.name} is already in contacts!`);
+    } else if (existingContactByNumber) {
+      Notiflix.Notify.failure(`Number ${newContact.number} is already in contacts!`);
     } else {
       dispatch(addContacts({ name: newContact.name, number: newContact.number }));
     }
   };
+  
 
   const { name, number } = formData;
   const isFormValid = name.trim() !== '' && number.trim() !== '';
